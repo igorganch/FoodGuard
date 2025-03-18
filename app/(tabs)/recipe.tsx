@@ -1,10 +1,10 @@
 import { Image, StyleSheet, Platform } from 'react-native';
 import {Text, View, } from 'react-native'
 
-export default function ProfileScreen() {
+export default function RecipeScreen() {
   return (
   <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-    <Text>Goodbye</Text>
+    <Text>Recipe Screen</Text>
   </View>
   );
 }

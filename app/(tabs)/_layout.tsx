@@ -26,13 +26,14 @@ export default function TabLayout() {
           default: {},
         }),
       }}>
-      <Tabs.Screen
+        <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name="home" color={color} />,
+          title: 'Products',
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="list" color={color} />,
         }}
       />
+       
       <Tabs.Screen
         name="explore"
         options={{
@@ -40,11 +41,18 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <FontAwesome size={28} name="clipboard" color={color} />,
         }}
       />
-      <Tabs.Screen
-        name="profile"
+       <Tabs.Screen
+        name="foodbank"
         options={{
-          title: 'Profile',
-          tabBarIcon: ({ color, size }) => <FontAwesome size={28} name="user" color={color} />,
+          title: 'Food Bank',
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="home" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="recipe"
+        options={{
+          title: 'Recipes',
+          tabBarIcon: ({ color, size }) => <FontAwesome size={28} name="book" color={color} />,
         }}
       />
       
