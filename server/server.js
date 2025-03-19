@@ -4,6 +4,7 @@ const app = express();
 const port = 8080;
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+const service = require("./service.js");
 
 // Middleware to parse JSON
 app.use(express.json());
@@ -54,6 +55,23 @@ app.put("/api/test/product/edit" , upload.none(),(req,res) =>{
     }
     return (tf ? res.status(200).json(food) : res.status(404).json({ message: "Error: Product not found"  })); 
 })
+/*TEST API CALL - Delete single product through associated through user id and product id.  URL - http://localhost:8080/api/test/product/delete?productId=${productId}&userId=${userId} */
+app.delete("/api/test/product/delete" , upload.none(),(req,res) =>{
+  if (!req.query.userId  || !req.query.productId ){
+     return res.status(400).json({ message: "Error: " + (!req.query.userId ?  " req.query.userId not defined " : "" ) + (!req.query.productId ?  " req.query.productId not defined " : "" )  });
+  }
+  let tf = false;
+  for (let i = 0; i < food.length; i++){
+      if (req.query.productId == food[i].id){
+          console.log(food[i].id);
+          food.splice(i,1);
+          tf = true;
+          break;
+
+      }
+  }
+  return (tf ? res.status(200).json(food) : res.status(404).json({ message: "Error: Product not found"  })); 
+})
 
 /*TEST API CALL - Create single product through associated through user id. Body parameter should include ("food_name": "Vanilla Yogurt", "expiry_date": "2025/03/17")  URL - http://localhost:8080/api/test/product/create?userId=${userId} */
 app.post("/api/test/product/create" , upload.none(), (req,res) =>{
@@ -78,7 +96,7 @@ app.post("/api/test/deepseek/upload/picture", (req, res) => {
     });
 });
 
-/*TEST API CALL - Login default credentials are Email : "example@gmail.com", Password : "1234" URL - http://localhost:8080/api/test/login*/ 
+/*TEST API CALL - Login default credentials are Email : "example@gmail.com", Password : "1234"   Body parameter should include ("email": "example@gmail.com", "password": "1234") URL - http://localhost:8080/api/test/login*/ 
 app.post("/api/test/login", upload.none(),(req, res)=>{
     
     if(!req.body.email|| !req.body.password ){
@@ -90,6 +108,19 @@ app.post("/api/test/login", upload.none(),(req, res)=>{
     }
     return res.status(401).json({ message: "Unauthorized: Invalid email / password" });
 })
+/*TEST API CALL - Register route, Body parameter should include ("email": "example@gmail.com", fullname :"Micheal Smith", password": "1234) URL - http://localhost:8080/api/test/register*/ 
+app.post("/api/test/register", upload.none(),(req, res)=>{
+ 
+  if(!req.body.email || !req.body.password || !req.body.fullname){
+      return res.status(400).json({ message: "Error: "  + (!req.body.password ?  " req.body.password not defined " : "") +  (!req.body.email ?  " req.body.email not defined " : "") + (!req.body.fullname ?  " req.body.fullname not defined " : "")  });
+  }
+  else {
+     let user = { "userId" : 1, "email" : req.body.email };
+     return res.status(200).json(user);
+  }
+})
+
+
 /*TEST API CALL - Get Recipes - http://localhost:8080/api/test/recipes*/
 app.get("/api/test/recipes", upload.none(),(req, res)=>{
   return res.status(200).json(recipes);
