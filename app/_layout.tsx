@@ -5,49 +5,43 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
 import 'react-native-reanimated';
+import { Platform } from 'react-native';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import WelcomeScreen from './welcome';
+import Login from './login';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+if (Platform.OS !== 'web') {
+  // Prevent auto-hiding the splash screen on native platforms
+  SplashScreen.preventAutoHideAsync();
+}
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const [showWelcome, setShowWelcome] = useState(true); 
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
+  const [showWelcome, setShowWelcome] = useState(true);
+
+  // Show WelcomeScreen for 2 seconds, then switch to Login
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowWelcome(false);
-    }, 2000); 
+    }, 2000);
     return () => clearTimeout(timer);
-
-
-  }, [])
+  }, []);
 
   useEffect(() => {
-    if (loaded) {
+    if (loaded && Platform.OS !== 'web') {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
 
-  if (!loaded) {
-    return null;
-  }
+  if (!loaded) return null;
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      {showWelcome ? (
-        <WelcomeScreen />
-      ) : ( 
-        <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-       
-      </Stack>
-      )}
-     
+      {showWelcome ? <WelcomeScreen /> : <Login />}
       <StatusBar style="auto" />
     </ThemeProvider>
   );
