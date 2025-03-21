@@ -1,29 +1,45 @@
+import { FontAwesome } from '@expo/vector-icons';
 import { StyleSheet, View, Text, TouchableOpacity, SafeAreaView, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import { useState } from 'react';
+
 export default function TabTwoScreen() {
+  interface Products {
+    id: string;
+    name: string;
+    goodUntil: string;
+    user?: string;
+  }
   // Product data with only two rows
-  const products = [
-    { id: '1', name: 'Milk', goodUntil: '2025-04-01' },
+  const products: Products[] = [
+    { id: '1', name: 'Milk', goodUntil: '2025-04-01', user: 'john' },
     { id: '2', name: 'Eggs', goodUntil: '2025-04-10' },
-    { id: '2', name: 'Eggs', goodUntil: '2025-04-10' },
-    { id: '2', name: 'Eggs', goodUntil: '2025-04-10' },
-    { id: '2', name: 'Eggs', goodUntil: '2025-04-10' },
-    { id: '2', name: 'Eggs', goodUntil: '2025-04-10' },
+    { id: '3', name: 'Eggs', goodUntil: '2025-04-10' },
+    { id: '4', name: 'Eggs', goodUntil: '2025-04-10' },
+    { id: '5', name: 'Eggs', goodUntil: '2025-04-10' },
+    { id: '6', name: 'Eggs', goodUntil: '2025-04-10' },
   ];
+
+  const [checkboxStates, setCheckboxStates] = useState<Record<string,boolean>>(
+    products.reduce((acc, product) => {
+      acc[product.id] = false;
+      return acc;
+    }, {} as Record<string, boolean>)
+  );
 
   return (
     <SafeAreaView style={styles.container}>
       {/* Header Section */}
       <View style={styles.header}>
         <Text style={styles.dashboardText}>DASHBOARD</Text>
-        <Text style={styles.welcomeText}>Welcome Back -username</Text>
+        <Text style={styles.welcomeText}>Welcome Back {products[0].user}</Text>
       </View>
 
       {/* Dashboard Content */}
       <View style={styles.cardContainer}>
         <TouchableOpacity style={styles.card}>
-          <Text style={styles.cardText}>Total Products</Text>
+          <Text style={styles.cardText}>Total Products {products.length}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.card}>
           <Text style={styles.cardText}>Product Expiring</Text>
@@ -33,7 +49,7 @@ export default function TabTwoScreen() {
       {/* Add Product Button */}
       <View style={styles.buttonWrapper}>
         <TouchableOpacity style={styles.addButton}>
-          <Icon name="photo-camera" size={24} color="#27391C" style={styles.icon} />
+          <FontAwesome name="camera" size={24} color="#27391C" style={styles.icon} />
           <Text style={styles.addButtonText}>Add Product</Text>
         </TouchableOpacity>
       </View>
@@ -69,19 +85,54 @@ export default function TabTwoScreen() {
             <View style={styles.tableRow}>
               <Text style={[styles.tableCell, { flex: 1 }]}>{item.name}</Text>
               <Text style={[styles.tableCell, { flex: 1 }]}>{item.goodUntil}</Text>
+              <View style={styles.checkbox}>
+              <TouchableOpacity
+              style={[
+                styles.customCheckbox,
+                checkboxStates[item.id] && styles.checked
+              ]}
+             
+            >
+              {checkboxStates[item.id] && <Text style={styles.checkmark}>✓</Text>}
+            </TouchableOpacity>
             </View>
+          </View>
           )}
         />
-      </View>
+        </View>
+     
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  checkbox: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  customCheckbox: {
+    width: 20,
+    height: 20,
+    borderWidth: 2,
+    borderColor: '#666',
+    borderRadius: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checked: {
+    backgroundColor: '#007AFF',
+    borderColor: '#007AFF',
+  },
+  checkmark: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
   container: {
     flex: 1,
     marginTop: 70,
-    paddingHorizontal: 20,
+    paddingHorizontal: 30,
     backgroundColor: '#f5f5f5',
   },
   header: {
@@ -101,6 +152,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    padding: 10
   },
   card: {
     flex: 1,
@@ -111,7 +163,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     alignItems: 'center',
     marginHorizontal: 5,
-    height:100,
+    height:150,
   },
 
   cardText: {
@@ -139,7 +191,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingVertical: 15,
     paddingHorizontal: 15,
-    borderRadius: 10,
+    borderRadius: 25,
     borderWidth: 1,  // Ensures the border is visible
     borderColor: '#2B5846',  // Sets the border color
     elevation: 3,

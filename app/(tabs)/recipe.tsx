@@ -3,13 +3,27 @@ import {Text, View, } from 'react-native'
 
 export default function RecipeScreen() {
   return (
-  <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-    <Text>Recipe Screen</Text>
+  <View style={{flex: 1}}>
+    <View style={styles.imageContainer}>
+
+   <Image source={require('../../assets/images/recipe.png')} style={styles.image} />
+
+    </View>
   </View>
   );
 }
 
 const styles = StyleSheet.create({
+  imageContainer: {
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  image: {
+    width: 200, 
+    height: 200, 
+    resizeMode: 'contain',
+    borderRadius: 80,
+  },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',

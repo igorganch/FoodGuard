@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 
-export default function Login() {
+type AuthScreenProps = {
+  showLogin: boolean;
+  setShowLogin: (value: boolean) => void;
+};
+
+const Login: React.FC<AuthScreenProps> = ({ showLogin, setShowLogin }) => {
   const router = useRouter();
 
   const [mode, setMode] = useState("login"); // "login" or "Sign Up"
@@ -12,6 +17,7 @@ export default function Login() {
 
   const onSubmitHandler = () => {
     console.log({ name, email, password });
+    setShowLogin(!showLogin)
     // Defer navigation by 0ms to ensure the stack is fully mounted
     setTimeout(() => {
       router.replace("/(tabs)");
@@ -93,6 +99,8 @@ export default function Login() {
     </View>
   );
 }
+
+export default Login;
 
 const styles = StyleSheet.create({
   // Full screen, pink background
