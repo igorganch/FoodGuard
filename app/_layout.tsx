@@ -22,11 +22,14 @@ export default function RootLayout() {
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
   const [showWelcome, setShowWelcome] = useState(true);
+  const [showLogin, setShowLogin] = useState(false); 
 
   // Show WelcomeScreen for 2 seconds, then switch to Login
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowWelcome(false);
+      setShowLogin(true);
+
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
@@ -41,7 +44,18 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      {showWelcome ? <WelcomeScreen /> : <Login />}
+      {showWelcome ? <WelcomeScreen /> : ""}
+        { showLogin ? <Login showLogin={showLogin} setShowLogin={setShowLogin} /> : (
+
+     <Stack>
+          
+          <Stack.Screen name="(tabs)" />
+
+        </Stack>
+
+        )}
+
+      
       <StatusBar style="auto" />
     </ThemeProvider>
   );
